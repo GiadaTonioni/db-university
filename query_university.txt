@@ -41,3 +41,40 @@ SELECT COUNT(*) as `n_insegnanti`
 FROM `teachers` 
 WHERE `phone` IS NULL;
 
+SECONDA PARTE
+
+1/1. Contare quanti iscritti ci sono stati ogni anno
+SELECT COUNT(*) AS `numero_iscritti`, YEAR(`enrolment_date`) as `anno`
+FROM `students`
+GROUP BY `anno`;
+
+1/2. Contare gli insegnanti che hanno l'ufficio nello stesso edificio
+SELECT COUNT(*) AS `numero_insegnanti`, `office_address`
+FROM `teachers`
+GOUP BY `office_address`;
+
+2/2. Selezionare tutti i Corsi di Laurea Magistrale del Dipartimento di
+Neuroscienze
+SELECT `degrees`.*
+FROM `degrees`
+JOIN `departments` ON `degrees`.`department_id` = `departments`.id
+WHERE `degrees`.`level` = 'magistrale' AND `departments`.`name` = 'Dipartimento di Neuroscienze';
+
+2/3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+SELECT `courses`.*
+FROM `courses`
+JOIN  `course_teacher` ON `course_teacher`.`course_id` = `courses`.`id`
+JOIN `teachers` ON `teachers`.id = `course_teacher`.`teacher_id`
+WHERE `teachers`.`name` = 'Fulvio' AND `teachers`.`surname` = 'Amato'
+
+2/5. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
+SELECT `teachers`.`name`, `teachers`.`surname`, `teachers`.`phone`, `teachers`.`email`, `teachers`.`office_address`, `teachers`.`office_number`
+FROM `teachers`
+JOIN `course_teacher` ON `teachers`.`id` = `course_teacher`.`teacher_id`
+JOIN `courses` ON `courses`.`id` = `course_teacher`.`course_id`
+JOIN `degrees` ON `degrees`.`id` = `courses`.`degree_id`
+JOIN `departments` ON `departments`.`id` = `degrees`.`department_id`
+WHERE `departments`.`name` = 'Dipartimento di Matematica';
+
+
+
